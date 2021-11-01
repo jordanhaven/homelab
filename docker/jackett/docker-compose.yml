@@ -1,0 +1,39 @@
+version: "3"
+services:
+  jackett:
+    container_name: jackett
+    entrypoint:
+      - /init
+    environment:
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - HOME=/root
+      - LANGUAGE=en_US.UTF-8
+      - LANG=en_US.UTF-8
+      - TERM=xterm
+      - XDG_DATA_HOME=/config
+      - XDG_CONFIG_HOME=/config
+      - AUTO_UPDATE=true
+      - TZ=${TZ}
+      - PGID=${PGID}
+      - PUID=${PUID}
+    hostname: jackett
+    image: linuxserver/jackett:latest
+    ipc: shareable
+    logging:
+      driver: local
+      options: {}
+    #ports removed in favor of internal CNAME
+    #ports:
+    #  - 0.0.0.0:9117:9117/tcp
+    restart: always
+    stdin_open: true
+    tty: true
+    volumes:
+      - ${CONFIG_DIR}:/config
+      - ${DOWNLOAD_DIR}:/downloads
+    networks:
+      - reverseproxy-nw
+
+networks:
+  reverseproxy-nw:
+    external: true

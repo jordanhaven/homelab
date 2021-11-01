@@ -15,6 +15,7 @@ services:
       - PGID=${SONARR_GID}
       - PUID=${SONARR_UID}
       - TZ=${TZ}
+      - TEST=true
     hostname: sonarr
     image: linuxserver/sonarr:latest
     ipc: shareable

@@ -1,7 +1,7 @@
 version: "3"
 services:
-  jackett:
-    container_name: jackett
+  sonarr:
+    container_name: sonarr
     entrypoint:
       - /init
     environment:
@@ -10,25 +10,25 @@ services:
       - LANGUAGE=en_US.UTF-8
       - LANG=en_US.UTF-8
       - TERM=xterm
-      - XDG_DATA_HOME=/config
-      - XDG_CONFIG_HOME=/config
-      - AUTO_UPDATE=true
+      - XDG_CONFIG_HOME=/config/xdg
+      - SONARR_BRANCH=master
+      - PGID=${SONARR_GID}
+      - PUID=${SONARR_UID}
       - TZ=${TZ}
-      - PGID=${PGID}
-      - PUID=${PUID}
-    hostname: jackett
-    image: linuxserver/jackett:latest
+    hostname: sonarr
+    image: linuxserver/sonarr:latest
     ipc: shareable
     logging:
       driver: local
       options: {}
-    #ports removed in favor of internal CNAME
     #ports:
-    #  - 0.0.0.0:9117:9117/tcp
+    #  - 0.0.0.0:8989:8989/tcp
+    #  - 0.0.0.0:9898:9898/tcp
     restart: always
     stdin_open: true
     tty: true
     volumes:
+      - ${TV_DIR}:/tv
       - ${CONFIG_DIR}:/config
     networks:
       - reverseproxy-nw

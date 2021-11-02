@@ -29,6 +29,7 @@ services:
     volumes:
       - ${MOVIES_DIR}:/movies
       - ${CONFIG_DIR}:/config
+      - ${DOWNLOADS_DIR}:/downloads
     networks:
       - reverseproxy-nw
 

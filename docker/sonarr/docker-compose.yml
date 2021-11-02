@@ -30,6 +30,7 @@ services:
     volumes:
       - ${TV_DIR}:/tv
       - ${CONFIG_DIR}:/config
+      - ${DOWNLOADS_DIR}:/downloads
     networks:
       - reverseproxy-nw
 

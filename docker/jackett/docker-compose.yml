@@ -22,9 +22,8 @@ services:
     logging:
       driver: local
       options: {}
-    #ports removed in favor of internal CNAME
-    #ports:
-    #  - 0.0.0.0:9117:9117/tcp
+    ports:
+      - 9117:9117/tcp
     restart: always
     stdin_open: true
     tty: true

@@ -6,10 +6,10 @@ services:
     container_name: pihole
     image: pihole/pihole:latest
     ports:
-      - "${HOST_IP}53:53/tcp"
-      - "${HOST_IP}53:53/udp"
-      - "${HOST_IP}67:67/udp"
-      - "${HOST_IP}8484:80/tcp"
+      - "${HOST_IP}:53:53/tcp"
+      - "${HOST_IP}:53:53/udp"
+      - "${HOST_IP}:67:67/udp"
+      - "${HOST_IP}:8484:80/tcp"
     environment:
       TZ: ${TZ}
       # WEBPASSWORD: 'set a secure password here or it will be random'

@@ -79,3 +79,22 @@ services:
       - no-new-privileges:true
     networks:
       - reverseproxy-nw
+
+  scrutiny:
+    container_name: scrutiny
+    image: analogj/scrutiny
+    cap_add:
+      - SYS_RAWIO
+#    ports:
+#      - "8080:8080"
+    volumes:
+      - /run/udev:/run/udev:ro
+      - ${SCRUTINY_CONFIG}:/scrutiny/config
+    devices:
+      - "/dev/sda"
+      - "/dev/sdb"
+      - "/dev/sdc"
+      - "/dev/sdd"
+    networks:
+      - reverseproxy-nw
+    restart: always

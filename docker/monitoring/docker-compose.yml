@@ -30,11 +30,49 @@ services:
     container_name: grafana
     #ports:
     #  - "3000:3000"
+    mem_limit: 4gb
+    environment:
+      TZ: "America/New_York"
+      GF_INSTALL_PLUGINS: "grafana-clock-panel,grafana-simple-json-datasource,grafana-piechart-panel,grafana-worldmap-panel"
+      GF_PATHS_DATA: "/var/lib/grafana"
+      GF_DEFAULT_INSTANCE_NAME: "home"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_SERVER_ENABLE_GZIP: "true"
+      GF_SERVER_DOMAIN: ${GF_SERVER_DOMAIN}
     volumes:
       - grafana-data:/var/lib/grafana
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100M"
     restart: unless-stopped
     networks:
       - reverseproxy-nw
+
+  influxdb-pfsense:
+    image: "influxdb:1.8.3-alpine"
+    container_name: influxdb
+    hostname: influxdb
+    mem_limit: 10gb
+    ports:
+      - "2003:2003"
+      - "8086:8086"
+    environment:
+      TZ: "America/New_York"
+      INFLUXDB_DATA_QUERY_LOG_ENABLED: "false"
+      INFLUXDB_REPORTING_DISABLED: "true"
+      INFLUXDB_HTTP_AUTH_ENABLED: "true"
+      INFLUXDB_ADMIN_USER: "admin"
+      INFLUXDB_ADMIN_PASSWORD: ${INFLUXDB_ADMIN_PASSWORD}
+      INFLUXDB_USER: "pfsense"
+      INFLUXDB_USER_PASSWORD: ${INFLUXDB_USER_PASSWORD}
+      INFLUXDB_DB: "pfsense"
+    volumes:
+      - ${INFLUXDB_DATA}:/var/lib/influxdb
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100M"
 
   node_exporter:
     image: quay.io/prometheus/node-exporter:latest

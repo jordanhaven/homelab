@@ -126,3 +126,20 @@ services:
     restart: unless-stopped
     networks:
       - reverseproxy-nw
+
+
+  heimdall:
+    image: lscr.io/linuxserver/heimdall
+    container_name: heimdall
+    environment:
+      - PUID=${HEIMDALL_UID}
+      - PGID=${HEIMDALL_GID}
+      - TZ=America/New York
+    volumes:
+      - ${HEIMDALL_CONFIG}:/config
+    #ports:
+    #  - 80:80
+    #  - 443:443
+    restart: unless-stopped
+    networks:
+      - reverseproxy-nw

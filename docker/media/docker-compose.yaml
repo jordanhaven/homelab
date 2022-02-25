@@ -208,8 +208,8 @@ services:
     logging:
       driver: local
       options: {}
-    #ports:
-    #  - 9091:9091/tcp
+    ports:
+      - 9091:9091/tcp
     restart: always
     stdin_open: true
     tty: true

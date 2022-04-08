@@ -240,6 +240,7 @@ services:
     container_name: plex
     image: plexinc/pms-docker
     restart: unless-stopped
+    runtime: nvidia
     environment:
       - TZ=${TZ}
       - PLEX_CLAIM=${PLEX_CLAIM}

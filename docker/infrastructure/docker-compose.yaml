@@ -143,3 +143,38 @@ services:
     restart: unless-stopped
     networks:
       - reverseproxy-nw
+
+  bookstack:
+    image: lscr.io/linuxserver/bookstack
+    container_name: bookstack
+    environment:
+      - PUID=${BOOKSTACK_UID}
+      - PGID=${BOOKSTACK_GID}
+      - APP_URL=${BOOKSTACK_URL}
+      - DB_HOST=bookstack_db
+      - DB_USER=bookstack
+      - DB_PASS=${BOOKSTACK_DB_PASS}
+      - DB_DATABASE=bookstackapp
+    volumes:
+      - ${BOOKSTACK_DATA}:/config
+    restart: unless-stopped
+    networks:
+        - reverseproxy-nw
+    depends_on:
+      - bookstack_db
+  bookstack_db:
+    image: lscr.io/linuxserver/mariadb
+    container_name: bookstack_db
+    environment:
+      - PUID=${BOOKSTACK_UID}
+      - PGID=${BOOKSTACK_GID}
+      - MYSQL_ROOT_PASSWORD=${BOOKSTACK_DB_PASS}
+      - TZ=America/New_York
+      - MYSQL_DATABASE=bookstackapp
+      - MYSQL_USER=bookstack
+      - MYSQL_PASSWORD=${BOOKSTACK_DB_PASS}
+    volumes:
+      - ${BOOKSTACK_DB_DATA}:/config
+    networks:
+        - reverseproxy-nw
+    restart: unless-stopped

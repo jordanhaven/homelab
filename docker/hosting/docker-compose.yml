@@ -1,0 +1,37 @@
+version: '2.3'
+services:
+  squidex_mongo:
+    image: mongo:5.0.6
+    volumes:
+      - /etc/squidex/mongo/db:/data/db
+    networks:
+      - internal
+    restart: unless-stopped
+
+  squidex_squidex:
+    image: "squidex/squidex:6"
+    container_name: "squidex"
+    environment:
+      - URLS__BASEURL=https://${SQUIDEX_DOMAIN}
+      - EVENTSTORE__TYPE=MongoDB
+      - EVENTSTORE__MONGODB__CONFIGURATION=mongodb://squidex_mongo
+      - STORE__MONGODB__CONFIGURATION=mongodb://squidex_mongo
+      - IDENTITY__ADMINEMAIL=${SQUIDEX_ADMINEMAIL}
+      - IDENTITY__ADMINPASSWORD=${SQUIDEX_ADMINPASSWORD}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/healthz"]
+      start_period: 60s
+    depends_on:
+      - squidex_mongo
+    volumes:
+      - /etc/squidex/assets:/app/Assets
+    networks:
+      - internal
+      - reverseproxy-nw
+    restart: unless-stopped
+    
+networks:
+  internal:
+    driver: bridge
+  reverseproxy-nw:
+    external: true

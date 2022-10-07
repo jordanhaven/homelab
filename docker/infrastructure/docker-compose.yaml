@@ -180,6 +180,7 @@ services:
     restart: unless-stopped
 
   docker-registry:
+    container_name: "docker-registry"
     image: registry:2
     environment:
       REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data

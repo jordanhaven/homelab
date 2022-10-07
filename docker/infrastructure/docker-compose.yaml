@@ -178,3 +178,13 @@ services:
     networks:
         - reverseproxy-nw
     restart: unless-stopped
+
+  docker-registry:
+    image: registry:2
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+    volumes:
+      - ./data:/data
+    networks:
+        - reverseproxy-nw
+    restart: unless-stopped

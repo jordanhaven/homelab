@@ -43,6 +43,20 @@ services:
       - SQUIDEX_CLIENT_SECRET=${JDD_SQUIDEX_CLIENT_SECRET}
       - SQUIDEX_CLIENT_HOST=${JDD_SQUIDEX_CLIENT_HOST}
       - SQUIDEX_CLIENT_ENDPOINT=${JDD_SQUIDEX_CLIENT_ENDPOINT}
+
+  wallergallery-dot-com:
+    image: "docker-registry.havendavismanor.com/wallergallery-dot-com:latest"
+    container_name: "wallergallery-dot-com"
+    depends_on:
+      - squidex_squidex
+    networks:
+      - reverseproxy-nw
+    restart: unless-stopped
+    environment:
+      - SQUIDEX_CLIENT_ID=${WG_SQUIDEX_CLIENT_ID}
+      - SQUIDEX_CLIENT_SECRET=${WG_SQUIDEX_CLIENT_SECRET}
+      - SQUIDEX_CLIENT_HOST=${WG_SQUIDEX_CLIENT_HOST}
+      - SQUIDEX_CLIENT_ENDPOINT=${WG_SQUIDEX_CLIENT_ENDPOINT}
 networks:
   internal:
     driver: bridge

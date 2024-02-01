@@ -268,3 +268,5 @@ services:
     ports:
       - "${PORT:-8191}:8191"
     restart: unless-stopped
+    networks:
+      - reverseproxy-nw

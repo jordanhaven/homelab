@@ -20,14 +20,6 @@ services:
   #  networks:
   #    - reverseproxy-nw
 
-  mongo:
-    image: mongo:6-nanoserver
-    container_name: external_mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-
   homeassistant:
     container_name: homeassistant
     image: "ghcr.io/home-assistant/home-assistant:stable"

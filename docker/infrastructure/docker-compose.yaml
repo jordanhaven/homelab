@@ -104,7 +104,7 @@ services:
 
 
   unifi-controller:
-    image: lscr.io/linuxserver/unifi-network-application:latest
+    image: lscr.io/linuxserver/unifi-controller
     container_name: unifi-controller
     environment:
       - PUID=${UNIFI_PUID}

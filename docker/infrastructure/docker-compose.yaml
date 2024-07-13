@@ -20,55 +20,9 @@ services:
   #  networks:
   #    - reverseproxy-nw
 
-  homeassistant:
-    container_name: homeassistant
-    image: "ghcr.io/home-assistant/home-assistant:stable"
-    volumes:
-      - ${HASS_CONFIG}:/config
-      - /etc/localtime:/etc/localtime:ro
-    restart: unless-stopped
-    privileged: true
-    network_mode: host
-
-
-  keycloak-db:
-      container_name: keycloak-db
-      image: postgres:13
-      restart: always
-      volumes:
-        - ${KEYCLOAK_DB_DIR}:/var/lib/postgresql/data:Z
-      environment:
-        POSTGRES_DB: keycloak
-        POSTGRES_USER: keycloak
-        POSTGRES_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
-      networks:
-        - keycloak-nw
-  keycloak:
-      container_name: keycloak
-      image: quay.io/keycloak/keycloak:latest
-      restart: always
-      environment:
-        DB_VENDOR: POSTGRES
-        DB_ADDR: keycloak-db
-        DB_DATABASE: keycloak
-        DB_USER: keycloak
-        DB_SCHEMA: public
-        DB_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
-        KEYCLOAK_USER: admin
-        KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
-        PROXY_ADDRESS_FORWARDING: 'true'
-      # ports:
-        # - 8080:8080
-      depends_on:
-        - keycloak-db
-      networks:
-        - reverseproxy-nw
-        - keycloak-nw
-
-
   nginx-proxy-manager:
     container_name: proxy-manager
-    image: 'jc21/nginx-proxy-manager:github-pr-1388'
+    image: 'docker.io/jc21/nginx-proxy-manager:latest'
     restart: always
     ports:
       - '80:80'
@@ -126,58 +80,6 @@ services:
     restart: unless-stopped
     networks:
       - reverseproxy-nw
-
-
-  heimdall:
-    image: lscr.io/linuxserver/heimdall
-    container_name: heimdall
-    environment:
-      - PUID=${HEIMDALL_UID}
-      - PGID=${HEIMDALL_GID}
-      - TZ=America/New York
-    volumes:
-      - ${HEIMDALL_CONFIG}:/config
-    #ports:
-    #  - 80:80
-    #  - 443:443
-    restart: unless-stopped
-    networks:
-      - reverseproxy-nw
-
-  bookstack:
-    image: lscr.io/linuxserver/bookstack
-    container_name: bookstack
-    environment:
-      - PUID=${BOOKSTACK_UID}
-      - PGID=${BOOKSTACK_GID}
-      - APP_URL=${BOOKSTACK_URL}
-      - DB_HOST=bookstack_db
-      - DB_USER=bookstack
-      - DB_PASS=${BOOKSTACK_DB_PASS}
-      - DB_DATABASE=bookstackapp
-    volumes:
-      - ${BOOKSTACK_DATA}:/config
-    restart: unless-stopped
-    networks:
-        - reverseproxy-nw
-    depends_on:
-      - bookstack_db
-  bookstack_db:
-    image: lscr.io/linuxserver/mariadb
-    container_name: bookstack_db
-    environment:
-      - PUID=${BOOKSTACK_UID}
-      - PGID=${BOOKSTACK_GID}
-      - MYSQL_ROOT_PASSWORD=${BOOKSTACK_DB_PASS}
-      - TZ=America/New_York
-      - MYSQL_DATABASE=bookstackapp
-      - MYSQL_USER=bookstack
-      - MYSQL_PASSWORD=${BOOKSTACK_DB_PASS}
-    volumes:
-      - ${BOOKSTACK_DB_DATA}:/config
-    networks:
-        - reverseproxy-nw
-    restart: unless-stopped
 
   docker-registry:
     container_name: "docker-registry"

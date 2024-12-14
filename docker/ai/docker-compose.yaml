@@ -1,4 +1,7 @@
 version: '3.8'
+networks:
+  reverseproxy-nw:
+    external: true
 
 services:
   ollama:

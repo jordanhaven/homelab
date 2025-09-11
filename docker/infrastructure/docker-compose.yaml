@@ -91,3 +91,27 @@ services:
     networks:
         - reverseproxy-nw
     restart: unless-stopped
+
+  backrest:
+    image: garethgeorge/backrest:latest
+    container_name: backrest
+    hostname: backrest
+    volumes:
+      - ${BACKREST_DIR}/data:/data
+      - ${BACKREST_DIR}/config:/config
+      - ${BACKREST_DIR}/cache:/cache
+      - ${BACKREST_DIR}/tmp:/tmp
+      - ${BACKREST_DIR}/rclone:/root/.config/rclone # Mount for rclone config (needed when using rclone remotes)
+      #- /path/to/backup/data:/userdata  # Mount local paths to backup
+      #- /path/to/local/repos:/repos     # Mount local repos (optional for remote storage)
+    environment:
+      - BACKREST_DATA=/data
+      - BACKREST_CONFIG=/config/config.json
+      - XDG_CACHE_HOME=/cache
+      - TMPDIR=/tmp
+      - TZ=America/New_York
+    ports:
+      - "9898:9898"
+    restart: unless-stopped
+    networks:
+        - reverseproxy-nw

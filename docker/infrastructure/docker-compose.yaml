@@ -115,3 +115,16 @@ services:
     restart: unless-stopped
     networks:
         - reverseproxy-nw
+
+  netalertx:
+    container_name: NetAlertX
+    hostname: NetAlertX
+    privileged: true
+    image: ghcr.io/jokob-sk/netalertx:latest
+    environment:
+      - TZ=America/New_York
+    restart: unless-stopped
+    volumes:
+      - ${NETALERTX_DIR}/db:/app/db
+      - ${NETALERTX_DIR}/config:/app/config
+    network_mode: host
